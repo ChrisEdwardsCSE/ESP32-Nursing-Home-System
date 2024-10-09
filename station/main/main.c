@@ -5,7 +5,6 @@
  * Created September 8, 2024
  */
 #include <stdio.h>
-#include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include <inttypes.h>
@@ -38,8 +37,8 @@
 #include "lwip/err.h"
 #include "lwip/sys.h"
 
-#define ESP_WIFI_SSID "chris-iphone-12"
-#define ESP_WIFI_PASS "ull-nvr-guess-this-69"
+#include "main.h"
+
 
 QueueHandle_t q_res_data; // Queue to hold incoming Resident data
 
@@ -74,11 +73,20 @@ struct res_data_t {
     uint8_t fall_detected:1;
 } res_data;
 
+void app_main(void)
+{
+    ESP_ERROR_CHECK(nvs_flash_init()); // BLE & WiFi use NVS Flash
+    nimble_port_init(); // Initialize NimBLE controller stack
+    ble_svc_gap_device_name_set("Smart-Nursing-Home-Station"); // Set device name
+    ble_svc_gap_init(); // Initialize GAP 
+    ble_hs_cfg.sync_cb = ble_app_on_sync; // Set callback for Host & Controller sync
+    nimble_port_freertos_init(host_task); // Set infinite task
 
-void ble_app_scan(void);
-void ble_app_advertise(void);
+    q_res_data = xQueueCreate(7, 50);
 
-static void mqtt_app_start(void);
+    wifi_init_sta(); // Configure and initialize WiFi
+}
+
 
 static void log_error_if_nonzero(const char *message, int error_code)
 {
@@ -331,6 +339,7 @@ static void mqtt_app_start(void)
 }
 
 
+uint8_t g_res_arr[MAX_NUM_RESIDENTS]; // DS to store whether we've received BLE signal for resident with ID
 /**
  * BLE GAP event handler. 
  * 
@@ -350,29 +359,23 @@ static int ble_gap_event(struct ble_gap_event *event, void *arg)
             ble_hs_adv_parse_fields(&fields, event->disc.data, event->disc.length_data);
 
             /**
+             * name = "Smart-Nursing-Home-Device"
              * mfg_data = Resident's Name
              * mfd_data_len = Length of Resident's Name
              * uint8_t le_role = Measured Heart Rate
              * unsigned le_role_is_present = Fall Detection flag
              * uint8_t *uri = oxygen level "XX.X%"
              */
-            if (strncmp("Smart-Nursing-Home-Device", fields.name, fields.name_len));
-            strncpy(received_data, (char*)fields.mfg_data, fields.mfg_data_len);
-            if (fields.name_len > 0) // ********************** FIX ***************************
-            {
-                char received_data[fields.mfg_data_len];
-                strncpy(received_data, (char*)fields.mfg_data, fields.mfg_data_len);
-                if (!strncmp(received_data, "John Doe", 8)) {
-                    /*** Parse the fields into a message to send ***/
-                    // "First Last, ID, <HR>, 1";
-                    snprintf(res_data_buf, 50, "%*s, %u, %u, %u,", fields.mfg_data_len, fields.mfg_data, fields.uri_len, fields.le_role, fields.le_role_is_present);
+            if (strncmp("Smart-Nursing-Home-Device", (char *)fields.name, (size_t)fields.name_len)) {
+                /*** Parse the fields into a message to send ***/
+                // "First Last, ID, <HR>, 1";
+                snprintf(res_data_buf, 50, "%*s, %u, %u, %u", fields.mfg_data_len, fields.mfg_data, fields.uri_len, fields.le_role, fields.le_role_is_present);
 
-                    xQueueSend(q_res_data, res_data_buf, pdMS_TO_TICKS(100));
-                    
-                    ble_gap_disc_cancel();
-                    vTaskDelay(pdMS_TO_TICKS(10));
-                    xTaskNotifyGive(wifi_mqtt_send_msg_handle);
-                }
+                xQueueSend(q_res_data, res_data_buf, pdMS_TO_TICKS(100));
+                
+                ble_gap_disc_cancel();
+                vTaskDelay(pdMS_TO_TICKS(10));
+                xTaskNotifyGive(wifi_mqtt_send_msg_handle);
             }
             break;
         default:
@@ -426,16 +429,3 @@ void host_task(void *param)
     nimble_port_run(); // This function will return only when nimble_port_stop() is executed
 }
 
-void app_main(void)
-{
-    ESP_ERROR_CHECK(nvs_flash_init()); // BLE & WiFi use NVS Flash
-    nimble_port_init(); // Initialize NimBLE controller stack
-    ble_svc_gap_device_name_set("Smart-Nursing-Home-Station"); // Set device name
-    ble_svc_gap_init(); // Initialize GAP 
-    ble_hs_cfg.sync_cb = ble_app_on_sync; // Set callback for Host & Controller sync
-    nimble_port_freertos_init(host_task); // Set infinite task
-
-    q_res_data = xQueueCreate(7, 50);
-
-    wifi_init_sta(); // Configure and initialize WiFi
-}

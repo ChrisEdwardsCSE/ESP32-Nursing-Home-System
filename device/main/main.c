@@ -16,9 +16,10 @@
 #include "drivers/inc/max30102-i2c.h"
 #include "drivers/inc/algorithm_by_RF.h"
 
+#include "main.h"
+
 // Heart Rate threshold for abnormal values in BPM
-#define HR_LOWER_THRESHOLD 60
-#define HR_UPPER_THRESHOLD 130
+
 
 const char *BLE_TAG = "BLE"; // Tag for ESP_LOGI logging
 
@@ -32,11 +33,6 @@ i2c_master_dev_handle_t max_master_dev_handle;
 TaskHandle_t sample_hr_handle;
 
 uint8_t ble_addr_type;
-void ble_app_scan(void);
-void ble_app_advertise(void *);
-void gpio_config_adxl_int(void);
-void i2c_config_adxl(void);
-void i2c_config_max(void);
 
 uint8_t green_led_val;
 
@@ -49,10 +45,12 @@ struct resident_data {
     float oxygen_level;
     uint8_t fall_detected:1;
 };
+struct resident_data res_data;
 
 // Buffers to MAX30102 heart rate and oxygen level readings
 uint32_t fifo_hr_buffer[BUFFER_SIZE];
 uint32_t fifo_spo2_buffer[BUFFER_SIZE];
+
 
 /**
  * ISR for Physical Trauma event from ADXL345
@@ -66,8 +64,32 @@ static void IRAM_ATTR adxl_int1_isr_handler(void *arg)
 
     vTaskNotifyGiveFromISR(ble_advertise_task_handle, NULL); // Start advertising emergency with Fall Detection set
 
-    gpio_set_level(green_led_val);
+    gpio_set_level(GPIO_NUM_1, green_led_val);
     green_led_val = !green_led_val;
+}
+
+void app_main()
+{
+    nvs_flash_init(); // Initialize NVS flash using
+    nimble_port_init(); // Initialize the controller stack
+    ble_svc_gap_device_name_set("Smart-Nursing-Home-Device"); // Set device name characteristic
+    ble_svc_gap_init(); // Initialize GAP service
+    ble_hs_cfg.sync_cb = ble_app_on_sync; // Set application as callback
+    nimble_port_freertos_init(host_task); // Set infinite task
+
+    vTaskDelay(pdMS_TO_TICKS(10));
+    gpio_config_adxl_int(); // Initialize GPIO pins of ADXL345 (and MAX30102)
+    i2c_config_adxl(); // Configure I2C peripheral for ADXL345
+    i2c_config_max(); // Configure I2C peripheral for MAX30102
+
+    vTaskDelay(pdMS_TO_TICKS(10));
+
+    // Start heart rate sampling task
+    BaseType_t sample_hr_err = xTaskCreate(sample_hr, "Sample Heart Rate", 8192, NULL, 
+                configMAX_PRIORITIES-2, &sample_hr_handle);
+    if (sample_hr_err != pdPASS) {
+        ESP_LOGI(BLE_TAG, "Task Create failed!!!: %d", sample_hr_err);
+    }
 }
 
 /**
@@ -80,8 +102,8 @@ static int ble_gap_event(struct ble_gap_event *event, void *arg)
     // the different connection events we could have
     switch (event->type)
     {
-        case BLE_GAP_EVENT_UNHANDLED_HCI_EVENT:
-            ESP_LOGI(BLE_TAG, "Unhandled HCI event");
+        case BLE_GAP_EVENT_TERM_FAILURE:
+            ESP_LOGI(BLE_TAG, "Termination Failure");
         default:
             break;
     }
@@ -207,29 +229,7 @@ void sample_hr(void*)
     }
 }
 
-void app_main()
-{
-    nvs_flash_init(); // Initialize NVS flash using
-    nimble_port_init(); // Initialize the controller stack
-    ble_svc_gap_device_name_set("Smart-Nursing-Home-Device"); // Set device name characteristic
-    ble_svc_gap_init(); // Initialize GAP service
-    ble_hs_cfg.sync_cb = ble_app_on_sync; // Set application as callback
-    nimble_port_freertos_init(host_task); // Set infinite task
 
-    vTaskDelay(pdMS_TO_TICKS(10));
-    gpio_config_adxl_int(); // Initialize GPIO pins of ADXL345 (and MAX30102)
-    i2c_config_adxl(); // Configure I2C peripheral for ADXL345
-    i2c_config_max(); // Configure I2C peripheral for MAX30102
-
-    vTaskDelay(pdMS_TO_TICKS(10));
-
-    // Start heart rate sampling task
-    BaseType_t sample_hr_err = xTaskCreate(sample_hr, "Sample Heart Rate", 8192, NULL, 
-                configMAX_PRIORITIES-2, &sample_hr_handle);
-    if (sample_hr_err != pdPASS) {
-        ESP_LOGI(BLE_TAG, "Task Create failed!!!: %d", sample_hr_err);
-    }
-}
 
 /**
  * Configures the ADXL345 for fall detection
