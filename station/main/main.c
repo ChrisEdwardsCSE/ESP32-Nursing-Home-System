@@ -80,7 +80,6 @@ void ble_app_advertise(void);
 
 static void mqtt_app_start(void);
 
-
 static void log_error_if_nonzero(const char *message, int error_code)
 {
     if (error_code != 0) {
@@ -357,6 +356,8 @@ static int ble_gap_event(struct ble_gap_event *event, void *arg)
              * unsigned le_role_is_present = Fall Detection flag
              * uint8_t *uri = oxygen level "XX.X%"
              */
+            if (strncmp("Smart-Nursing-Home-Device", fields.name, fields.name_len));
+            strncpy(received_data, (char*)fields.mfg_data, fields.mfg_data_len);
             if (fields.name_len > 0) // ********************** FIX ***************************
             {
                 char received_data[fields.mfg_data_len];
@@ -427,13 +428,12 @@ void host_task(void *param)
 
 void app_main(void)
 {
-    ESP_ERROR_CHECK(nvs_flash_init());              // BLE & WiFi use NVS Flash
-
-    nimble_port_init();                             // Initialize NimBLE controller stack
-    ble_svc_gap_device_name_set("ESP32-Scan-ched"); // Set device name
-    ble_svc_gap_init();                             // Initialize GAP 
-    ble_hs_cfg.sync_cb = ble_app_on_sync;           // Set callback for Host & Controller sync
-    nimble_port_freertos_init(host_task);           // Set infinite task
+    ESP_ERROR_CHECK(nvs_flash_init()); // BLE & WiFi use NVS Flash
+    nimble_port_init(); // Initialize NimBLE controller stack
+    ble_svc_gap_device_name_set("Smart-Nursing-Home-Station"); // Set device name
+    ble_svc_gap_init(); // Initialize GAP 
+    ble_hs_cfg.sync_cb = ble_app_on_sync; // Set callback for Host & Controller sync
+    nimble_port_freertos_init(host_task); // Set infinite task
 
     q_res_data = xQueueCreate(7, 50);
 
