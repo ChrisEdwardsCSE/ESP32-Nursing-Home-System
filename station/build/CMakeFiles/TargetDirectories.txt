@@ -11,7 +11,7 @@
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/CMakeFiles/flash.dir
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/CMakeFiles/encrypted-flash.dir
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/CMakeFiles/_project_elf_src.dir
-/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/CMakeFiles/mqtt_tcp.elf.dir
+/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/CMakeFiles/nursing-home-monitoring-station.elf.dir
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/CMakeFiles/size.dir
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/CMakeFiles/size-files.dir
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/CMakeFiles/size-components.dir
@@ -401,6 +401,7 @@
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/esp-idf/esp_wifi/CMakeFiles/install.dir
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/esp-idf/esp_wifi/CMakeFiles/install/local.dir
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/esp-idf/esp_wifi/CMakeFiles/install/strip.dir
+/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/esp-idf/bt/CMakeFiles/__idf_bt.dir
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/esp-idf/bt/CMakeFiles/edit_cache.dir
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/esp-idf/bt/CMakeFiles/rebuild_cache.dir
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/esp-idf/bt/CMakeFiles/list_install_components.dir

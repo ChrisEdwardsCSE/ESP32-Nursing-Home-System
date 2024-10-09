@@ -1,15 +1,15 @@
 {
     "version":            "1.1",
-    "project_name":       "SIMS-Tut",
-    "project_version":    "1",
+    "project_name":       "nursing-home-monitoring-device",
+    "project_version":    "fc7e935-dirty",
     "project_path":       "/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device",
     "idf_path":           "/Users/ched/esp/esp-idf",
     "build_dir":          "/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/build",
     "config_file":        "/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/sdkconfig",
     "config_defaults":    "",
     "bootloader_elf":     "/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/build/bootloader/bootloader.elf",
-    "app_elf":            "SIMS-Tut.elf",
-    "app_bin":            "SIMS-Tut.bin",
+    "app_elf":            "nursing-home-monitoring-device.elf",
+    "app_bin":            "nursing-home-monitoring-device.bin",
     "build_type":         "flash_app",
     "git_revision":       "v5.2.2-dirty",
     "target":             "esp32s3",
@@ -805,7 +805,7 @@
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/build/esp-idf/main/libmain.a",
-            "sources": [ "/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/main/SIMS-Tut.c" ],
+            "sources": [ "/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/main/main.c", "/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/main/drivers/src/adxl345-i2c.c", "/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/main/drivers/src/max30102-i2c.c", "/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/main/drivers/src/algorithm_by_RF.c" ],
             "include_dirs": [ "." ]
         },
         "mbedtls": {

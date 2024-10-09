@@ -11,7 +11,7 @@
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/build/CMakeFiles/flash.dir
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/build/CMakeFiles/encrypted-flash.dir
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/build/CMakeFiles/_project_elf_src.dir
-/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/build/CMakeFiles/SIMS-Tut.elf.dir
+/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/build/CMakeFiles/nursing-home-monitoring-device.elf.dir
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/build/CMakeFiles/size.dir
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/build/CMakeFiles/size-files.dir
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/device/build/CMakeFiles/size-components.dir

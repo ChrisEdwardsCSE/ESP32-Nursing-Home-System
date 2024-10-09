@@ -3,8 +3,6 @@ cmake_minimum_required(VERSION 3.16)
 
 if("${CONFIG}" STREQUAL "" OR "${CONFIG}" STREQUAL "")
   file(REMOVE_RECURSE
-  "SIMS-Tut.bin"
-  "SIMS-Tut.map"
   "bootloader/bootloader.bin"
   "bootloader/bootloader.elf"
   "bootloader/bootloader.map"
@@ -18,6 +16,8 @@ if("${CONFIG}" STREQUAL "" OR "${CONFIG}" STREQUAL "")
   "flasher_args.json"
   "ldgen_libraries"
   "ldgen_libraries.in"
+  "nursing-home-monitoring-device.bin"
+  "nursing-home-monitoring-device.map"
   "project_elf_src_esp32s3.c"
   "x509_crt_bundle.S"
   )

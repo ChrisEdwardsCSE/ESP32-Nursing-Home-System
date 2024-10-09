@@ -34,6 +34,7 @@
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/esp-idf/wpa_supplicant/libwpa_supplicant.a
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/esp-idf/esp_coex/libesp_coex.a
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/esp-idf/esp_wifi/libesp_wifi.a
+/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/esp-idf/bt/libbt.a
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/esp-idf/unity/libunity.a
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/esp-idf/cmock/libcmock.a
 /Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station/build/esp-idf/console/libconsole.a

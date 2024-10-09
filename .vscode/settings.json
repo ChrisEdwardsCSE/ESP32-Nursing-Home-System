@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "protocol_examples_common.h": "c",
+        "esp_log.h": "c",
+        "esp_netif.h": "c",
+        "mqtt_client.h": "c",
+        "sdkconfig.h": "c",
+        "max30102-i2c.h": "c",
+        "queue.h": "c",
+        "event_groups.h": "c",
+        "adxl345-i2c.h": "c",
+        "ble_svc_gap.h": "c",
+        "nimble_port.h": "c",
+        "task.h": "c",
+        "nimble_port_freertos.h": "c"
+    },
+    "cmake.sourceDirectory": "/Users/ched/Desktop/Personal/Embedded/ESP32/nursing-home-system/station"
+}
